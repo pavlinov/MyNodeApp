@@ -40,16 +40,8 @@ class User {
         });
     }
 
-    static findByUsername(username, callback) {
-        db.get(`SELECT * FROM users WHERE username = ?`, [username], (err, row) => {
-            if (err) return callback(err);
-            if (row) return callback(null, new User(row.id, row.username, row.password, row.admin, row.can_edit_articles));
-            return callback();
-        });
-    }
-    
     static findById(id, callback) {
-        db.get(`SELECT * FROM users WHERE id = ?`, [id], (err, row) => {
+        db.db.get(`SELECT * FROM users WHERE id = ?`, [id], (err, row) => {
             if (err) return callback(err);
             if (row) return callback(null, new User(row.id, row.username, row.password, row.admin, row.can_edit_articles));
             return callback();
@@ -57,7 +49,7 @@ class User {
     }
     
     static createUser(username, password, admin = false, canEditArticles = false, callback) {
-        db.run(`INSERT INTO users (username, password, admin, can_edit_articles) VALUES (?, ?, ?, ?)`, 
+        db.db.run(`INSERT INTO users (username, password, admin, can_edit_articles) VALUES (?, ?, ?, ?)`, 
         [username, password, admin, canEditArticles], 
         function(err) {
             if (err) return callback(err);
@@ -66,30 +58,30 @@ class User {
     }
     
     static updateUserImage(imagePath, callback) {
-        db.run(`UPDATE users SET profile_image = ? WHERE id = ?`, 
+        db.db.run(`UPDATE users SET profile_image = ? WHERE id = ?`, 
         [imagePath, this.id], callback);
     }
     
     static updateUserPermission(canEditArticles, callback) {
-        db.run(`UPDATE users SET can_edit_articles = ? WHERE id = ?`, 
+        db.db.run(`UPDATE users SET can_edit_articles = ? WHERE id = ?`, 
         [canEditArticles, this.id], callback);
     }
     
     static updateUserBio(bio, callback) {
-        db.run(`UPDATE users SET bio = ? WHERE id = ?`, 
+        db.db.run(`UPDATE users SET bio = ? WHERE id = ?`, 
         [bio, this.id], callback);
     }
     
 
     static getAllUsers(callback) {
-        db.all(`SELECT * FROM users`, [], (err, users) => {
+        db.db.all(`SELECT * FROM users`, [], (err, users) => {
             if (err) return callback(err);
             return callback(null, users.map(user => new User(user.id, user.username, user.password, user.admin, user.can_edit_articles)));
         });
     }
 
     static updateUserFlags(id, admin, canEditArticles, callback) {
-        db.run(`UPDATE users SET admin = ?, can_edit_articles = ? WHERE id = ?`, 
+        db.db.run(`UPDATE users SET admin = ?, can_edit_articles = ? WHERE id = ?`, 
         [admin, canEditArticles, id], callback);
     }
 

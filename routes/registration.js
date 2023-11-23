@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db');
+const User = require('../models/User'); // Import the User model
 
 // Registration route to serve the form
 router.get('/register', (req, res) => {
@@ -12,24 +12,34 @@ router.get('/register', (req, res) => {
 // Handle registration form submission
 router.post('/register', (req, res) => {
     const { username, password, confirmPassword } = req.body;
+
+    // Check if the entered passwords match
     if (password !== confirmPassword) {
         req.session.messages = { error: 'Passwords do not match.' };
         return res.redirect('/register');
     }
-    db.findUserByUsername(username, (err, row) => {
-        if (row) {
+
+    // Check if the username already exists using the User model
+    User.findByUsername(username, (err, existingUser) => {
+        if (err) {
+            res.status(500).send('Error checking for existing user.');
+            return;
+        }
+        if (existingUser) {
             req.session.messages = { error: 'Username is already taken.' };
             return res.redirect('/register');
-        } else {
-            const insert = 'INSERT INTO users (username, password) VALUES (?, ?)';
-            db.run(insert, [username, password], (err) => { // In a real scenario, hash the password first
-                if (err) {
-                    res.status(500).send('Error registering user.');
-                } else {
-                    res.redirect('/login');
-                }
-            });
         }
+
+        // Since the username doesn't exist, create a new user
+        User.createUser(username, password, false /* admin */, true /* canEditArticles */, (err, newUser) => {
+            if (err) {
+                res.status(500).send('Error registering user.');
+            } else {
+                // Registration was successful, redirect to the login page
+                req.session.messages = { success: 'Registration successful. Please log in.' };
+                res.redirect('/login');
+            }
+        });
     });
 });
 

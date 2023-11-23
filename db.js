@@ -27,14 +27,6 @@ const findUserById = (id, callback) => {
     });
 };
 
-// Create a new user
-const createUser = (username, password, callback) => {
-    const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
-    db.run(query, [username, password], function(err) {
-        callback(err);
-    });
-};
-
 // Update a user's profile image
 const updateUserImage = (userId, imagePath, callback) => {
     const query = 'UPDATE users SET profile_image = ? WHERE id = ?';
@@ -85,7 +77,6 @@ const updateUserFlags = (userId, admin, canEditArticles, callback) => {
 module.exports = {
     findUserByUsername,
     findUserById,
-    createUser,
     updateUserImage,
     updateUserPermission,
     getAllArticles,
