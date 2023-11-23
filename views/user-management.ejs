@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <!-- Navigation Menu -->
+    <%- include('partials/navmenu.ejs', {active: 'admin'}); %>
+
+    
+    <div class="container mt-4">
+        <h1>User Management</h1>
+        <% if (users.length) { %>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Admin</th>
+                            <th>Can Edit Articles</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% users.forEach(user => { %>
+                            <form action="/admin/update-user" method="post">
+                            <tr>
+                                <td><%= user.username %></td>
+                                <td>
+                                    <input type="checkbox" name="admin" value="1" <%= user.admin ? 'checked' : '' %>>
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="can_edit_articles" value="1" <%= user.can_edit_articles ? 'checked' : '' %>>
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-primary" name="userId" value="<%= user.id %>">Update</button>
+                                </td>
+                            </tr>
+                            </form>
+                        <% }); %>
+                    </tbody>
+                </table>
+
+        <% } else { %>
+            <p>No users found.</p>
+        <% } %>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.6.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

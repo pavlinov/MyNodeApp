@@ -20,24 +20,24 @@ Before running this application, make sure you have the following installed:
 1. Clone the repository to your local machine:
 
     
-
-    git clone https://github.com/your-username/your-repository.git
-    cd your-repository
-    
+```
+git clone git@github.com:pavlinov/MyNodeApp.git
+cd MyNodeApp
+```
 
 2. Install the dependencies:
 
     
- 
-   npm install
-    
+```
+npm install
+```
 
 3. Start the application:
 
     
-   
- npm start
-    
+```
+npm start
+```
 
   
   The application should be running on [http://localhost:3000](http://localhost:3000).
@@ -59,7 +59,7 @@ Login page
 The application uses an SQLite3 database. You need to create the initial schema by running the following command:
 
 ```sh
-node sqlite_migrate_db.js
+node scripts/sqlite_migrate_db.js
 ```
 
 ## Screenshots

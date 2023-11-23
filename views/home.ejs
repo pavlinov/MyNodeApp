@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Info</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" rel="stylesheet">
+</head>
+<body>
+
+        <!-- Navigation Menu -->
+        <%- include('partials/navmenu.ejs', {active: 'home'}); %>
+
+    <div class="container mt-5">
+                <!-- Display any messages -->
+                <% if (messages.success) { %>
+                    <div class="alert alert-success">
+                        <%= messages.success %>
+                    </div>
+                <% } %>
+                <% if (messages.error) { %>
+                    <div class="alert alert-danger">
+                        <%= messages.error %>
+                    </div>
+                <% } %>
+        <h1>Welcome, <%= user.username %>!</h1>
+
+        <!-- Display user profile image -->
+        <% if (user.profile_image) { %>
+            <img src="<%= user.profile_image %>" alt="User Image" class="img-thumbnail mb-4">
+        <% } %>
+        <p>Your user ID is: <%= user.id %></p>
+        <!-- replace password character to *-->
+        
+        <p>Your password is: <%= '*'.repeat(user.password.length) %>  (Note: This should be hashed and not shown on a real application)</p>
+
+        <% if (user.admin) { %>
+            <div class="alert alert-info">Hello, admin! You have full access to the system.</div>
+            <!-- admin/user-management link -->
+            <a href="/admin/user-management" class="btn btn-primary"><i class="fa fa-users"></i> User Management</a>
+        <% } %>
+        
+        <!-- Display user's bio if it exists -->
+        <% if (user.bio) { %>
+            <p><strong>About me:</strong> <%= user.bio %></p>
+        <% } else { %>
+            <p>You have not set up a bio yet.</p>
+        <% } %>
+        <a href="/logout">Logout</a>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.6.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>
